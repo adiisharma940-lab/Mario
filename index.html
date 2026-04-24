@@ -4,133 +4,219 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AKAZA — Upper Moon Three</title>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@900&family=Bebas+Neue&family=Noto+Serif+JP:wght@300;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@900&family=Bebas+Neue&family=Noto+Serif+JP:wght@300;400;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <style>
-* { margin:0; padding:0; box-sizing:border-box; }
-:root {
-  --red: #C0392B;
-  --blue: #1E88E5;
-  --ice: #90CAF9;
-  --bone: #F5E6D3;
-  --dark: #050508;
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --red:#C0392B; --deep-red:#7B0000; --blue:#1E88E5;
+  --ice:#90CAF9; --bone:#F5E6D3; --dark:#050508;
 }
-html { background:#050508; }
-body { background:#050508; color:var(--bone); font-family:'Noto Serif JP',serif; overflow-x:hidden; cursor:none; }
+html,body{background:var(--dark);overflow-x:hidden;}
+body{color:var(--bone);font-family:'Noto Serif JP',serif;cursor:none;}
 
-/* CURSOR */
-#cur  { position:fixed; width:10px; height:10px; background:var(--red); border-radius:50%; pointer-events:none; z-index:9999; transform:translate(-50%,-50%); mix-blend-mode:difference; }
-#cur2 { position:fixed; width:36px; height:36px; border:1px solid rgba(192,57,43,0.5); border-radius:50%; pointer-events:none; z-index:9998; transform:translate(-50%,-50%); }
+/* ── CURSOR ── */
+#cur{position:fixed;width:10px;height:10px;background:var(--red);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);mix-blend-mode:difference;transition:width .2s,height .2s;}
+#cur2{position:fixed;width:38px;height:38px;border:1px solid rgba(192,57,43,.45);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:border-color .3s;}
 
-/* LOADER */
-#loader { position:fixed; inset:0; background:#050508; z-index:9997; display:flex; align-items:center; justify-content:center; flex-direction:column; gap:20px; }
-.lk { font-family:'Noto Serif JP',serif; font-size:90px; color:var(--red); opacity:0; }
-.lb { width:180px; height:1px; background:rgba(255,255,255,0.07); position:relative; }
-.lf { position:absolute; left:0; top:0; height:1px; width:0; background:var(--red); }
+/* ── SOUND BUTTON ── */
+#soundbtn{
+  position:fixed;top:28px;right:36px;z-index:1000;
+  width:42px;height:42px;border:1px solid rgba(192,57,43,.4);
+  border-radius:50%;display:flex;align-items:center;justify-content:center;
+  cursor:pointer;background:rgba(5,5,8,.6);backdrop-filter:blur(8px);
+  transition:border-color .3s,background .3s;
+}
+#soundbtn:hover{border-color:rgba(192,57,43,.9);background:rgba(192,57,43,.15);}
+#soundbtn svg{width:18px;height:18px;fill:var(--bone);opacity:.7;}
 
-/* STICKY SCENE — all action happens here */
-#track { position:relative; }
-.spacer { height:700vh; }
-.scene  { position:sticky; top:0; width:100vw; height:100vh; overflow:hidden; }
+/* ── LOADER ── */
+#loader{position:fixed;inset:0;background:var(--dark);z-index:9997;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:22px;}
+.lk{font-family:'Noto Serif JP',serif;font-size:90px;color:var(--red);opacity:0;}
+.lb{width:180px;height:1px;background:rgba(255,255,255,.07);position:relative;overflow:hidden;}
+.lf{position:absolute;left:0;top:0;height:1px;width:0;background:var(--red);}
+.ltxt{font-size:10px;letter-spacing:.5em;color:rgba(255,255,255,.25);text-transform:uppercase;}
 
-/* CAMERA — the element that zooms, rotates, translates */
-#cam {
-  position:absolute;
-  inset:-30%;
+/* ══════════════════════════════════════════════
+   SCROLL ARCHITECTURE
+   700vh of scroll — one sticky scene reads it all
+══════════════════════════════════════════════ */
+#track{position:relative;}
+.spacer{height:700vh;}
+.scene{position:sticky;top:0;width:100vw;height:100vh;overflow:hidden;}
+
+/* ── CAMERA ── */
+#cam{
+  position:absolute;inset:-30%;
   transform-origin:center center;
   will-change:transform;
 }
 
-/* IMAGE LAYERS */
-.il {
-  position:absolute; inset:0;
-  background-size:cover; background-position:center;
-  opacity:0; will-change:transform,opacity;
-  transform:scale(1);
+/* ── VIDEO / IMAGE LAYERS ── */
+.ml{position:absolute;inset:0;opacity:0;will-change:opacity,transform;}
+.ml video{width:100%;height:100%;object-fit:cover;display:block;}
+.ml.img{background-size:cover;background-position:center;}
+
+#l1{} /* video 5.mp4 */
+#l2{} /* video 6.mp4 */
+#l3{} /* video 2.mp4 */
+#l4{background-image:url('assets/4.jpg');filter:saturate(1.4) brightness(.8);}  /* eye close-up */
+#l5{background-image:url('assets/7.jpg');filter:saturate(1.2) brightness(.65);} /* eye reflection */
+#l6{background-image:url('assets/9.jpg');filter:hue-rotate(200deg) saturate(.5) brightness(.45);} /* origin dark */
+#l7{background-image:url('assets/3.jpg');} /* akaza + woman */
+#l8{background-image:url('assets/8.jpg');filter:brightness(.3) saturate(.2);} /* dark power */
+
+/* ── COLOUR GRADES ── */
+.gr{position:absolute;inset:0;pointer-events:none;opacity:0;will-change:opacity;z-index:2;}
+#g1{background:radial-gradient(ellipse at 55% 50%,rgba(100,0,0,.6) 0%,rgba(0,0,0,.88) 100%);}
+#g2{background:radial-gradient(ellipse at 40% 55%,rgba(21,101,192,.55) 0%,rgba(0,0,0,.92) 100%);}
+#g3{background:linear-gradient(135deg,rgba(10,15,44,.95) 0%,rgba(60,0,0,.65) 100%);}
+#g4{background:radial-gradient(ellipse at 50% 50%,rgba(0,0,0,.2) 0%,rgba(0,0,0,.96) 100%);}
+#g5{background:radial-gradient(ellipse at center,rgba(139,0,0,.4) 0%,rgba(0,0,0,.98) 80%);}
+
+/* ══════════════════════════════════════════════
+   TEXT PANELS — sit above everything
+══════════════════════════════════════════════ */
+.tp{
+  position:absolute;inset:0;
+  display:flex;align-items:center;justify-content:center;
+  pointer-events:none;z-index:20;
 }
-#i1 { background-image:url('assets/3.jpg'); }
-#i2 { background-image:url('assets/4.jpg'); filter:saturate(1.4) brightness(0.85); }
-#i3 { background-image:url('assets/9.jpg'); filter:hue-rotate(200deg) saturate(0.6) brightness(0.55); }
-#i4 { background-image:url('assets/7.jpg'); filter:saturate(1.2) brightness(0.65); }
-#i5 { background-image:url('assets/8.jpg'); filter:brightness(0.35) saturate(0.25); }
 
-/* COLOR GRADES */
-.gr { position:absolute; inset:0; pointer-events:none; opacity:0; will-change:opacity; }
-#g1 { background:radial-gradient(ellipse at 65% 45%, rgba(120,0,0,0.55) 0%, rgba(0,0,0,0.92) 100%); }
-#g2 { background:radial-gradient(ellipse at 30% 60%, rgba(21,101,192,0.65) 0%, rgba(0,0,0,0.93) 100%); }
-#g3 { background:linear-gradient(135deg, rgba(10,15,44,0.96) 0%, rgba(50,0,0,0.7) 100%); }
-#g4 { background:radial-gradient(ellipse at 50% 50%, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0.96) 100%); }
-#g5 { background:radial-gradient(ellipse at center, rgba(139,0,0,0.45) 0%, rgba(0,0,0,0.99) 80%); }
-
-/* TEXT PANELS — fixed layer on top */
-.tp {
-  position:absolute; inset:0;
-  display:flex; align-items:center; justify-content:center;
-  pointer-events:none; z-index:10;
-}
-
-/* ─── PANEL 1: HERO ─── */
-#p1 { flex-direction:column; gap:0; }
-.p1jp {
+/* ── PANEL 1: HERO ── */
+#p1{flex-direction:column;gap:0;}
+.p1jp{
   font-family:'Noto Serif JP',serif;
-  font-size:clamp(48px,10vw,130px);
-  color:rgba(255,255,255,0.04);
-  position:absolute; letter-spacing:0.4em; pointer-events:none;
+  font-size:clamp(50px,11vw,140px);
+  color:rgba(255,255,255,.035);
+  position:absolute;letter-spacing:.45em;pointer-events:none;
+  user-select:none;
 }
-.p1sub {
-  font-size:clamp(9px,1.2vw,13px); letter-spacing:0.7em; color:var(--red);
-  text-transform:uppercase; opacity:0; transform:translateY(36px);
+.p1sub{
+  font-size:clamp(9px,1.2vw,13px);letter-spacing:.75em;color:var(--red);
+  text-transform:uppercase;opacity:0;transform:translateY(40px);
+  margin-bottom:14px;
 }
-.p1name {
+.p1name{
   font-family:'Cinzel Decorative',serif;
-  font-size:clamp(72px,17vw,210px); font-weight:900; line-height:0.85;
-  background:linear-gradient(135deg,#fff 0%,#e8c4c4 30%,var(--red) 60%,var(--ice) 100%);
-  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
-  filter:drop-shadow(0 0 70px rgba(192,57,43,0.5));
-  opacity:0; transform:translateY(64px) scale(0.9);
+  font-size:clamp(70px,17vw,210px);font-weight:900;line-height:.85;
+  background:linear-gradient(135deg,#fff 0%,#e8c4c4 30%,var(--red) 58%,var(--ice) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 0 80px rgba(192,57,43,.5));
+  opacity:0;transform:translateY(70px) scale(.9);
+}
+.p1scroll{
+  position:absolute;bottom:38px;left:50%;transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;gap:7px;
+  opacity:0;
+}
+.p1scroll span{font-size:8px;letter-spacing:.55em;color:rgba(255,255,255,.25);text-transform:uppercase;}
+.p1scroll i{display:block;width:1px;height:52px;background:linear-gradient(to bottom,var(--red),transparent);animation:sla 2s ease-in-out infinite;}
+@keyframes sla{0%,100%{opacity:1;transform:scaleY(1);transform-origin:top}50%{opacity:.2;transform:scaleY(.35);transform-origin:top}}
+
+/* ── PANEL 2: ORIGIN (LEFT) ── */
+#p2{justify-content:flex-start;align-items:center;padding-left:9vw;}
+.p2w{max-width:500px;}
+.plabel{font-size:10px;letter-spacing:.65em;color:var(--red);text-transform:uppercase;margin-bottom:14px;opacity:0;transform:translateX(-70px);}
+.phead{
+  font-family:'Cinzel Decorative',serif;font-size:clamp(24px,3.8vw,48px);
+  line-height:1.12;margin-bottom:20px;
+  opacity:0;transform:translateX(-100px);
+}
+.pbody{
+  font-size:clamp(13px,1.15vw,15px);line-height:2;
+  color:rgba(245,230,211,.62);
+  opacity:0;transform:translateX(-70px);
+}
+.srow{display:flex;gap:36px;margin-top:28px;padding-top:24px;border-top:1px solid rgba(192,57,43,.2);opacity:0;transform:translateY(36px);}
+.sv{font-family:'Bebas Neue',sans-serif;font-size:46px;color:var(--red);line-height:1;display:block;}
+.sl{font-size:9px;letter-spacing:.3em;color:rgba(255,255,255,.28);text-transform:uppercase;}
+
+/* ── PANEL 3: TECHNIQUE (CENTER) ── */
+#p3{flex-direction:column;gap:14px;}
+.p3tech{
+  font-family:'Bebas Neue',sans-serif;font-size:clamp(11px,1.6vw,17px);
+  letter-spacing:.95em;color:var(--ice);
+  text-shadow:0 0 30px rgba(144,202,249,.85);
+  opacity:0;transform:translateY(-55px);
+}
+.p3big{
+  font-family:'Cinzel Decorative',serif;font-size:clamp(42px,9.5vw,125px);
+  font-weight:900;line-height:1;
+  background:linear-gradient(90deg,var(--ice) 0%,#fff 50%,var(--ice) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 0 55px rgba(144,202,249,.65));
+  opacity:0;transform:scale(1.55);
+}
+.p3sub{
+  font-size:clamp(10px,1.15vw,13px);letter-spacing:.45em;
+  color:rgba(144,202,249,.52);
+  opacity:0;transform:translateY(55px);
 }
 
-/* ─── PANEL 2: ORIGIN (left-aligned) ─── */
-#p2 { justify-content:flex-start; padding-left:10vw; }
-.p2w { max-width:500px; }
-.plabel { font-size:10px; letter-spacing:0.6em; color:var(--red); text-transform:uppercase; opacity:0; transform:translateX(-70px); }
-.phead  { font-family:'Cinzel Decorative',serif; font-size:clamp(26px,4vw,50px); line-height:1.1; margin:14px 0; opacity:0; transform:translateX(-90px); }
-.pbody  { font-size:clamp(13px,1.2vw,15px); line-height:2; color:rgba(245,230,211,0.6); opacity:0; transform:translateX(-70px); }
-.srow   { display:flex; gap:36px; margin-top:28px; padding-top:24px; border-top:1px solid rgba(192,57,43,0.2); opacity:0; transform:translateY(32px); }
-.sv { font-family:'Bebas Neue',sans-serif; font-size:44px; color:var(--red); line-height:1; display:block; }
-.sl { font-size:9px; letter-spacing:0.3em; color:rgba(255,255,255,0.3); text-transform:uppercase; }
+/* ── PANEL 4: QUOTE (BOTTOM RIGHT) ── */
+#p4{justify-content:flex-end;align-items:flex-end;padding:0 8vw 7vh 0;}
+.p4w{max-width:560px;text-align:right;}
+.qm{
+  font-family:'Cinzel Decorative',serif;font-size:130px;color:var(--red);
+  line-height:.35;display:block;
+  opacity:0;transform:translateX(55px);
+}
+.qt{
+  font-family:'Noto Serif JP',serif;font-size:clamp(15px,1.8vw,22px);
+  line-height:1.95;font-style:italic;
+  opacity:0;transform:translateX(75px);
+}
+.qa{
+  font-size:10px;letter-spacing:.45em;color:var(--red);
+  text-transform:uppercase;margin-top:18px;
+  opacity:0;transform:translateX(50px);
+}
 
-/* ─── PANEL 3: TECHNIQUE (center) ─── */
-#p3 { flex-direction:column; gap:12px; }
-.p3tech { font-family:'Bebas Neue',sans-serif; font-size:clamp(11px,1.6vw,18px); letter-spacing:0.9em; color:var(--ice); text-shadow:0 0 30px rgba(144,202,249,0.8); opacity:0; transform:translateY(-50px); }
-.p3big  { font-family:'Cinzel Decorative',serif; font-size:clamp(40px,9vw,120px); font-weight:900; background:linear-gradient(90deg,var(--ice),#fff,var(--ice)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; filter:drop-shadow(0 0 50px rgba(144,202,249,0.6)); line-height:1; opacity:0; transform:scale(1.5); }
-.p3sub  { font-size:clamp(10px,1.2vw,13px); letter-spacing:0.4em; color:rgba(144,202,249,0.55); opacity:0; transform:translateY(50px); }
+/* ── PANEL 5: FINAL (CENTER) ── */
+#p5{flex-direction:column;text-align:center;gap:0;}
+.p5jp{
+  font-family:'Noto Serif JP',serif;
+  font-size:clamp(80px,18vw,200px);
+  color:rgba(192,57,43,.045);
+  position:absolute;letter-spacing:.2em;pointer-events:none;user-select:none;
+}
+.p5badge{
+  border:1px solid rgba(192,57,43,.35);padding:9px 28px;
+  font-size:9px;letter-spacing:.65em;color:var(--red);text-transform:uppercase;
+  margin-bottom:30px;opacity:0;transform:translateY(40px);
+}
+.p5title{
+  font-family:'Cinzel Decorative',serif;font-size:clamp(20px,3.8vw,52px);
+  max-width:700px;line-height:1.25;
+  opacity:0;transform:translateY(60px);
+}
+.p5line{width:0;height:1px;background:var(--red);margin:28px auto;}
+.p5body{
+  font-size:clamp(13px,1.1vw,15px);line-height:2.1;
+  color:rgba(245,230,211,.5);max-width:520px;
+  opacity:0;transform:translateY(34px);
+}
 
-/* ─── PANEL 4: QUOTE (right-aligned, bottom) ─── */
-#p4 { justify-content:flex-end; align-items:flex-end; padding:0 8vw 7vh 0; }
-.p4w { max-width:540px; text-align:right; }
-.qm  { font-family:'Cinzel Decorative',serif; font-size:130px; color:var(--red); line-height:0.35; display:block; opacity:0; transform:translateX(50px); }
-.qt  { font-family:'Noto Serif JP',serif; font-size:clamp(15px,1.8vw,22px); line-height:1.9; font-style:italic; opacity:0; transform:translateX(70px); }
-.qa  { font-size:10px; letter-spacing:0.4em; color:var(--red); text-transform:uppercase; margin-top:18px; opacity:0; transform:translateX(50px); }
+/* ── NAV DOTS ── */
+#dots{position:fixed;right:26px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:10px;z-index:200;}
+.dot{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.18);transition:all .35s;cursor:pointer;}
+.dot.on{background:var(--red);transform:scale(1.8);}
 
-/* ─── PANEL 5: FINAL (center) ─── */
-#p5 { flex-direction:column; text-align:center; gap:0; }
-.p5jp    { font-family:'Noto Serif JP',serif; font-size:clamp(80px,18vw,200px); color:rgba(192,57,43,0.05); position:absolute; letter-spacing:0.2em; pointer-events:none; }
-.p5badge { border:1px solid rgba(192,57,43,0.35); padding:8px 26px; font-size:9px; letter-spacing:0.6em; color:var(--red); text-transform:uppercase; margin-bottom:28px; opacity:0; transform:translateY(36px); }
-.p5title { font-family:'Cinzel Decorative',serif; font-size:clamp(20px,3.8vw,52px); max-width:680px; line-height:1.25; opacity:0; transform:translateY(56px); }
-.p5line  { width:0; height:1px; background:var(--red); margin:26px auto; }
-.p5body  { font-size:clamp(12px,1.1vw,15px); line-height:2.1; color:rgba(245,230,211,0.5); max-width:500px; opacity:0; transform:translateY(30px); }
+/* ── COUNTER ── */
+#cnt{position:fixed;bottom:26px;left:34px;z-index:200;font-family:'Bebas Neue',sans-serif;font-size:26px;color:rgba(255,255,255,.2);letter-spacing:.05em;}
 
-/* NAV */
-#dots { position:fixed; right:26px; top:50%; transform:translateY(-50%); display:flex; flex-direction:column; gap:10px; z-index:200; }
-.dot  { width:5px; height:5px; border-radius:50%; background:rgba(255,255,255,0.18); transition:all 0.3s; cursor:pointer; }
-.dot.on { background:var(--red); transform:scale(1.7); }
-#cnt  { position:fixed; bottom:26px; left:34px; z-index:200; font-family:'Bebas Neue',sans-serif; font-size:26px; color:rgba(255,255,255,0.2); }
-#sh   { position:fixed; bottom:26px; left:50%; transform:translateX(-50%); display:flex; flex-direction:column; align-items:center; gap:6px; z-index:200; transition:opacity 0.5s; }
-#sh span { font-size:8px; letter-spacing:0.5em; color:rgba(255,255,255,0.2); text-transform:uppercase; }
-#sh i { display:block; width:1px; height:48px; background:linear-gradient(to bottom,var(--red),transparent); animation:sl 2s ease-in-out infinite; }
-@keyframes sl { 0%,100%{opacity:1;transform:scaleY(1);transform-origin:top} 50%{opacity:0.2;transform:scaleY(0.35);transform-origin:top} }
+/* ── TOP LOGO ── */
+#logo{position:fixed;top:28px;left:36px;z-index:200;font-family:'Cinzel Decorative',serif;font-size:13px;letter-spacing:.12em;color:rgba(255,255,255,.35);}
+
+/* ── VIDEO caption overlay ── */
+.vcap{
+  position:absolute;bottom:60px;width:100%;text-align:center;
+  font-size:10px;letter-spacing:.5em;color:rgba(255,255,255,.2);
+  text-transform:uppercase;z-index:5;pointer-events:none;
+  opacity:0;
+}
 </style>
 </head>
 <body>
@@ -139,22 +225,34 @@ body { background:#050508; color:var(--bone); font-family:'Noto Serif JP',serif;
 <div id="loader">
   <div class="lk">猗窩座</div>
   <div class="lb"><div class="lf"></div></div>
+  <div class="ltxt">Loading</div>
 </div>
 
 <!-- CURSOR -->
 <div id="cur"></div>
 <div id="cur2"></div>
 
-<!-- NAV -->
+<!-- UI -->
+<div id="logo">AKAZA</div>
 <div id="dots">
-  <div class="dot on" data-s="0"></div>
-  <div class="dot" data-s="1"></div>
-  <div class="dot" data-s="2"></div>
-  <div class="dot" data-s="3"></div>
-  <div class="dot" data-s="4"></div>
+  <div class="dot on"></div>
+  <div class="dot"></div>
+  <div class="dot"></div>
+  <div class="dot"></div>
+  <div class="dot"></div>
 </div>
 <div id="cnt">01 / 05</div>
-<div id="sh"><span>Scroll</span><i></i></div>
+
+<!-- SOUND BUTTON -->
+<div id="soundbtn" title="Toggle soundtrack">
+  <svg id="icon-sound" viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
+  <svg id="icon-mute" viewBox="0 0 24 24" style="display:none"><path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>
+</div>
+
+<!-- HIDDEN AUDIO -->
+<audio id="ost" loop preload="auto">
+  <source src="assets/1.webm" type="audio/webm">
+</audio>
 
 <!-- SCROLL TRACK -->
 <div id="track">
@@ -162,35 +260,59 @@ body { background:#050508; color:var(--bone); font-family:'Noto Serif JP',serif;
 
   <div class="scene">
 
-    <!-- CAMERA (zoom + rotate + pan) -->
+    <!-- CAMERA -->
     <div id="cam">
-      <div class="il" id="i1"></div>
-      <div class="il" id="i2"></div>
-      <div class="il" id="i3"></div>
-      <div class="il" id="i4"></div>
-      <div class="il" id="i5"></div>
+      <!-- Layer 1: video 5.mp4 — hero intro -->
+      <div class="ml" id="l1">
+        <video id="v1" loop muted playsinline preload="auto">
+          <source src="assets/5.mp4" type="video/mp4">
+        </video>
+      </div>
+      <!-- Layer 2: video 6.mp4 — combat -->
+      <div class="ml" id="l2">
+        <video id="v2" loop muted playsinline preload="auto">
+          <source src="assets/6.mp4" type="video/mp4">
+        </video>
+      </div>
+      <!-- Layer 3: video 2.mp4 — intense -->
+      <div class="ml" id="l3">
+        <video id="v3" loop muted playsinline preload="auto">
+          <source src="assets/2.mp4" type="video/mp4">
+        </video>
+      </div>
+      <!-- Layer 4: image 4.jpg — eye close-up -->
+      <div class="ml img" id="l4"></div>
+      <!-- Layer 5: image 7.jpg — eye reflection -->
+      <div class="ml img" id="l5"></div>
+      <!-- Layer 6: image 3.jpg — akaza + woman -->
+      <div class="ml img" id="l6"></div>
+      <!-- Layer 7: image 9.jpg — dark origin -->
+      <div class="ml img" id="l7"></div>
+      <!-- Layer 8: image 8.jpg — power -->
+      <div class="ml img" id="l8"></div>
     </div>
 
-    <!-- COLOUR GRADES -->
+    <!-- GRADES -->
     <div class="gr" id="g1"></div>
     <div class="gr" id="g2"></div>
     <div class="gr" id="g3"></div>
     <div class="gr" id="g4"></div>
     <div class="gr" id="g5"></div>
 
-    <!-- ── PANEL 1: HERO ── -->
+    <!-- ══ PANEL 1: HERO ══ -->
     <div class="tp" id="p1">
       <div class="p1jp">猗窩座</div>
-      <div class="p1sub">Upper Moon Three — Twelve Kizuki</div>
+      <div class="p1sub">Upper Moon Three &nbsp;—&nbsp; Twelve Kizuki</div>
       <h1 class="p1name">AKAZA</h1>
+      <div class="p1scroll"><span>Scroll</span><i></i></div>
     </div>
 
-    <!-- ── PANEL 2: ORIGIN ── -->
+    <!-- ══ PANEL 2: ORIGIN ══ -->
     <div class="tp" id="p2">
       <div class="p2w">
-        <div class="plabel">Origin / 出発点</div>
+        <div class="plabel">Origin &nbsp;/&nbsp; 出発点</div>
         <h2 class="phead">The Boy Who<br>Became Darkness</h2>
-        <p class="pbody">Born as Hakuji — abandoned, broken, forged by suffering. His fists, already hardened by a life of cruelty, became weapons that outlived his humanity. Muzan found him at his lowest and offered the one thing he craved: power enough to protect.</p>
+        <p class="pbody">Born as Hakuji — abandoned, broken, forged by a world that offered only cruelty. His fists, already hardened by suffering, became weapons that would outlive his humanity. Muzan Kibutsuji found him at his lowest and offered the one thing he craved: power enough to protect those he loved.</p>
         <div class="srow">
           <div><span class="sv">III</span><span class="sl">Upper Moon</span></div>
           <div><span class="sv">133+</span><span class="sl">Years a Demon</span></div>
@@ -199,29 +321,29 @@ body { background:#050508; color:var(--bone); font-family:'Noto Serif JP',serif;
       </div>
     </div>
 
-    <!-- ── PANEL 3: TECHNIQUE ── -->
+    <!-- ══ PANEL 3: TECHNIQUE ══ -->
     <div class="tp" id="p3">
-      <div class="p3tech">Blood Demon Art / 血鬼術</div>
+      <div class="p3tech">Blood Demon Art &nbsp;/&nbsp; 血鬼術</div>
       <div class="p3big">COMPASS<br>NEEDLE</div>
       <div class="p3sub">Destructive Death — Eight Layered Strikes</div>
     </div>
 
-    <!-- ── PANEL 4: QUOTE ── -->
+    <!-- ══ PANEL 4: QUOTE ══ -->
     <div class="tp" id="p4">
       <div class="p4w">
         <span class="qm">"</span>
-        <p class="qt">Become a demon. You will live and grow stronger for eternity. Isn't that what you want — the strength to protect what matters?</p>
+        <p class="qt">Become a demon. You will live and grow stronger for eternity. Isn't that what you want — the strength to protect what matters to you?</p>
         <div class="qa">— Akaza to Tanjiro Kamado</div>
       </div>
     </div>
 
-    <!-- ── PANEL 5: FINAL ── -->
+    <!-- ══ PANEL 5: FINAL ══ -->
     <div class="tp" id="p5">
       <div class="p5jp">猗窩座</div>
-      <div class="p5badge">Upper Moon — Rank Three</div>
+      <div class="p5badge">Upper Moon &nbsp;—&nbsp; Rank Three</div>
       <h2 class="p5title">Strength is the Only Truth That Remains</h2>
       <div class="p5line"></div>
-      <p class="p5body">He despised weakness not from cruelty, but from grief — for those he could not save. In death, Hakuji remembered. And remembering, he chose to be human once more.</p>
+      <p class="p5body">He despised weakness not from cruelty, but from grief — for the ones he could not save. In death, Hakuji remembered. And remembering, he chose to be human once more.</p>
     </div>
 
   </div>
@@ -230,154 +352,188 @@ body { background:#050508; color:var(--bone); font-family:'Noto Serif JP',serif;
 <script>
 gsap.registerPlugin(ScrollTrigger);
 
-/* ─── CURSOR ─────────────────────────────── */
-const cur=document.getElementById('cur'), cur2=document.getElementById('cur2');
+/* ─── CURSOR ─── */
+const cur=document.getElementById('cur'),cur2=document.getElementById('cur2');
 let mx=0,my=0,rx=0,ry=0;
 document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px';});
 (function ring(){rx+=(mx-rx)*0.1;ry+=(my-ry)*0.1;cur2.style.left=rx+'px';cur2.style.top=ry+'px';requestAnimationFrame(ring);})();
 
-/* ─── LOADER ─────────────────────────────── */
-gsap.to('.lk',{opacity:1,duration:0.6,delay:0.2});
-gsap.to('.lf',{width:'100%',duration:1.9,ease:'power2.inOut',delay:0.3,
-  onComplete:()=>gsap.to('#loader',{opacity:0,duration:0.7,delay:0.15,
-    onComplete:()=>{document.getElementById('loader').style.display='none';init();}})});
+/* ─── SOUND ─── */
+const ost=document.getElementById('ost');
+const soundBtn=document.getElementById('soundbtn');
+const iconOn=document.getElementById('icon-sound');
+const iconOff=document.getElementById('icon-mute');
+let playing=false;
+ost.volume=0.45;
 
-/* ─── INIT ───────────────────────────────── */
+soundBtn.addEventListener('click',()=>{
+  if(playing){ost.pause();playing=false;iconOn.style.display='none';iconOff.style.display='';}
+  else{ost.play().catch(()=>{});playing=true;iconOn.style.display='';iconOff.style.display='none';}
+});
+
+// Auto-play on first scroll
+let audioStarted=false;
+window.addEventListener('scroll',()=>{
+  if(!audioStarted){audioStarted=true;ost.play().then(()=>{playing=true;iconOn.style.display='';iconOff.style.display='none';}).catch(()=>{});}
+},{once:true});
+
+/* ─── LOADER ─── */
+gsap.to('.lk',{opacity:1,duration:.6,delay:.2});
+gsap.to('.lf',{width:'100%',duration:2,ease:'power2.inOut',delay:.3,
+  onComplete:()=>{
+    gsap.to('#loader',{opacity:0,duration:.75,delay:.2,
+      onComplete:()=>{
+        document.getElementById('loader').style.display='none';
+        init();
+      }
+    });
+  }
+});
+
+/* ─── INIT ─── */
 function init(){
-  gsap.set('#i1',{opacity:1});
+  // Start all videos looping (muted so browser allows)
+  ['v1','v2','v3'].forEach(id=>{
+    const v=document.getElementById(id);
+    v.play().catch(()=>{});
+  });
+
+  // Show first layer + grade
+  gsap.set('#l1',{opacity:1});
   gsap.set('#g1',{opacity:1});
+
   // Entrance
-  gsap.to('.p1sub', {opacity:1,y:0,duration:1,ease:'power3.out',delay:0.3});
-  gsap.to('.p1name',{opacity:1,y:0,scale:1,duration:1.5,ease:'expo.out',delay:0.5});
+  gsap.to('.p1sub', {opacity:1,y:0,duration:1.1,ease:'power3.out',delay:.4});
+  gsap.to('.p1name',{opacity:1,y:0,scale:1,duration:1.6,ease:'expo.out',delay:.6});
+  gsap.to('.p1scroll',{opacity:1,duration:1,delay:2.2});
+
   buildTimeline();
 }
 
-/* ─── MAIN SCROLL TIMELINE ───────────────── */
+/* ─── MAIN SCROLL TIMELINE ─── */
 function buildTimeline(){
   const dots=document.querySelectorAll('.dot');
   const cnt=document.getElementById('cnt');
-  const sh=document.getElementById('sh');
 
   const tl=gsap.timeline({
     scrollTrigger:{
       trigger:'#track',
       start:'top top',
       end:'bottom bottom',
-      scrub:1.4,
+      scrub:1.6,
       onUpdate(self){
         const p=self.progress;
         const idx=p<0.2?0:p<0.4?1:p<0.6?2:p<0.8?3:4;
         dots.forEach((d,i)=>d.classList.toggle('on',i===idx));
         cnt.textContent=String(idx+1).padStart(2,'0')+' / 05';
-        sh.style.opacity=p<0.04?1:0;
       }
     }
   });
 
-  /* ════════════════════════════════════════
-     S1 → S2   scroll 0% → 20%
-     Camera:  zoom in + tilt right + pan left
-     Image:   i1(3.jpg) → i3(9.jpg)
-     Text:    P1 flies UP out  |  P2 slides in from LEFT
-  ════════════════════════════════════════ */
+  /* ══════════════════════════════════════════
+     SCENE 1 → 2  [0 – 1]
+     Video 5.mp4  →  Video 6.mp4
+     Camera: zoom in + tilt -6° + pan left
+     Text: P1 flies UP out  |  P2 slides from LEFT
+  ══════════════════════════════════════════ */
   tl
-  // Camera move
-  .to('#cam',{scale:1.4,rotation:-5,xPercent:6,yPercent:-4,duration:1,ease:'none'},0)
+  .to('#cam',{scale:1.4,rotation:-6,xPercent:7,yPercent:-4,duration:1,ease:'none'},0)
 
-  // Grade swap
-  .to('#g1',{opacity:0,duration:0.35,ease:'none'},0.62)
-  .to('#g2',{opacity:1,duration:0.35,ease:'none'},0.62)
+  // grade swap
+  .to('#g1',{opacity:0,duration:.38,ease:'none'},.60)
+  .to('#g2',{opacity:1,duration:.38,ease:'none'},.60)
 
-  // Image crossfade
-  .to('#i1',{opacity:0,duration:0.45,ease:'none'},0.58)
-  .to('#i3',{opacity:1,duration:0.45,ease:'none'},0.58)
+  // media swap: video1 → video2
+  .to('#l1',{opacity:0,duration:.5,ease:'none'},.55)
+  .to('#l2',{opacity:1,duration:.5,ease:'none'},.55)
 
-  // P1 out — fly UP
-  .to('.p1sub', {opacity:0,y:-70,duration:0.28,ease:'power2.in'},0.1)
-  .to('.p1name',{opacity:0,y:-90,scale:0.88,duration:0.32,ease:'power2.in'},0.08)
+  // P1 out — UP
+  .to('.p1sub', {opacity:0,y:-65,duration:.28,ease:'power2.in'},.08)
+  .to('.p1name',{opacity:0,y:-90,scale:.88,duration:.32,ease:'power2.in'},.06)
+  .to('.p1scroll',{opacity:0,duration:.2},.05)
 
-  // P2 in — slide from LEFT
-  .fromTo('.plabel',{opacity:0,x:-80},{opacity:1,x:0,duration:0.38,ease:'power3.out'},0.68)
-  .fromTo('.phead', {opacity:0,x:-110},{opacity:1,x:0,duration:0.44,ease:'expo.out'}, 0.72)
-  .fromTo('.pbody', {opacity:0,x:-80}, {opacity:1,x:0,duration:0.38,ease:'power3.out'},0.78)
-  .fromTo('.srow',  {opacity:0,y:38},  {opacity:1,y:0,duration:0.36,ease:'power3.out'},0.85)
+  // P2 in — from LEFT
+  .fromTo('.plabel',{opacity:0,x:-80},{opacity:1,x:0,duration:.40,ease:'power3.out'},.68)
+  .fromTo('.phead', {opacity:0,x:-115},{opacity:1,x:0,duration:.46,ease:'expo.out'}, .72)
+  .fromTo('.pbody', {opacity:0,x:-80}, {opacity:1,x:0,duration:.40,ease:'power3.out'},.78)
+  .fromTo('.srow',  {opacity:0,y:40},  {opacity:1,y:0,duration:.36,ease:'power3.out'},.86)
 
-  /* ════════════════════════════════════════
-     S2 → S3   scroll 20% → 40%
-     Camera:  big zoom + counter-tilt left + pan right
-     Image:   i3(9.jpg) → i2(4.jpg)  [the eye close-up]
-     Text:    P2 flies RIGHT out  |  P3 SCALE-IN from centre
-  ════════════════════════════════════════ */
-  .to('#cam',{scale:1.75,rotation:7,xPercent:-9,yPercent:5,duration:1,ease:'none'},1)
+  /* ══════════════════════════════════════════
+     SCENE 2 → 3  [1 – 2]
+     Video 6.mp4  →  Image 4.jpg (eye close-up)
+     Camera: BIG zoom + counter-tilt +8° + pan right
+     Text: P2 flies RIGHT out  |  P3 scales in from centre
+  ══════════════════════════════════════════ */
+  .to('#cam',{scale:1.8,rotation:8,xPercent:-10,yPercent:5,duration:1,ease:'none'},1)
 
-  .to('#g2',{opacity:0,duration:0.35,ease:'none'},1.58)
-  .to('#g3',{opacity:1,duration:0.35,ease:'none'},1.58)
-  .to('#i3',{opacity:0,duration:0.45,ease:'none'},1.54)
-  .to('#i2',{opacity:1,duration:0.45,ease:'none'},1.54)
+  .to('#g2',{opacity:0,duration:.36,ease:'none'},1.58)
+  .to('#g3',{opacity:1,duration:.36,ease:'none'},1.58)
+  .to('#l2',{opacity:0,duration:.5,ease:'none'},1.53)
+  .to('#l4',{opacity:1,duration:.5,ease:'none'},1.53)
 
-  // P2 out — fly RIGHT
-  .to('.plabel',{opacity:0,x:80,duration:0.28,ease:'power2.in'},1.06)
-  .to('.phead', {opacity:0,x:100,duration:0.3, ease:'power2.in'},1.09)
-  .to('.pbody', {opacity:0,x:80, duration:0.28,ease:'power2.in'},1.12)
-  .to('.srow',  {opacity:0,y:-34,duration:0.26,ease:'power2.in'},1.14)
+  // P2 out — RIGHT
+  .to('.plabel',{opacity:0,x:80, duration:.28,ease:'power2.in'},1.06)
+  .to('.phead', {opacity:0,x:105,duration:.30,ease:'power2.in'},1.09)
+  .to('.pbody', {opacity:0,x:80, duration:.28,ease:'power2.in'},1.12)
+  .to('.srow',  {opacity:0,y:-38,duration:.26,ease:'power2.in'},1.14)
 
-  // P3 in — scale from large
-  .fromTo('.p3tech',{opacity:0,y:-60},   {opacity:1,y:0,duration:0.38,ease:'power3.out'},1.66)
-  .fromTo('.p3big', {opacity:0,scale:1.6},{opacity:1,scale:1,duration:0.55,ease:'expo.out'},1.70)
-  .fromTo('.p3sub', {opacity:0,y:60},    {opacity:1,y:0,duration:0.38,ease:'power3.out'},1.78)
+  // P3 in — scale zoom
+  .fromTo('.p3tech',{opacity:0,y:-60},    {opacity:1,y:0,duration:.38,ease:'power3.out'},1.66)
+  .fromTo('.p3big', {opacity:0,scale:1.6},{opacity:1,scale:1,duration:.56,ease:'expo.out'},1.70)
+  .fromTo('.p3sub', {opacity:0,y:60},     {opacity:1,y:0,duration:.38,ease:'power3.out'},1.79)
 
-  /* ════════════════════════════════════════
-     S3 → S4   scroll 40% → 60%
-     Camera:  pull back + extreme tilt right + pan right-down
-     Image:   i2(4.jpg) → i4(7.jpg)  [eye reflection]
-     Text:    P3 shrinks/fades OUT  |  P4 slides from BOTTOM-RIGHT
-  ════════════════════════════════════════ */
-  .to('#cam',{scale:1.22,rotation:-9,xPercent:11,yPercent:7,duration:1,ease:'none'},2)
+  /* ══════════════════════════════════════════
+     SCENE 3 → 4  [2 – 3]
+     Image 4.jpg  →  Video 2.mp4
+     Camera: pull back + tilt -10° + pan right-down
+     Text: P3 shrinks OUT  |  P4 slides from BOTTOM-RIGHT
+  ══════════════════════════════════════════ */
+  .to('#cam',{scale:1.22,rotation:-10,xPercent:12,yPercent:8,duration:1,ease:'none'},2)
 
-  .to('#g3',{opacity:0,duration:0.35,ease:'none'},2.58)
-  .to('#g4',{opacity:1,duration:0.35,ease:'none'},2.58)
-  .to('#i2',{opacity:0,duration:0.45,ease:'none'},2.54)
-  .to('#i4',{opacity:1,duration:0.45,ease:'none'},2.54)
+  .to('#g3',{opacity:0,duration:.36,ease:'none'},2.58)
+  .to('#g4',{opacity:1,duration:.36,ease:'none'},2.58)
+  .to('#l4',{opacity:0,duration:.5,ease:'none'},2.53)
+  .to('#l3',{opacity:1,duration:.5,ease:'none'},2.53)
 
   // P3 out — shrink
-  .to('.p3tech',{opacity:0,y:-70,duration:0.28,ease:'power2.in'},2.06)
-  .to('.p3big', {opacity:0,scale:0.7,duration:0.32,ease:'power2.in'},2.06)
-  .to('.p3sub', {opacity:0,y:70,duration:0.28,ease:'power2.in'},2.09)
+  .to('.p3tech',{opacity:0,y:-70, duration:.28,ease:'power2.in'},2.06)
+  .to('.p3big', {opacity:0,scale:.65,duration:.32,ease:'power2.in'},2.06)
+  .to('.p3sub', {opacity:0,y:70,  duration:.28,ease:'power2.in'},2.09)
 
-  // P4 in — slide from RIGHT
-  .fromTo('.qm',{opacity:0,x:60},{opacity:0.35,x:0,duration:0.36,ease:'power3.out'},2.66)
-  .fromTo('.qt',{opacity:0,x:80},{opacity:1,x:0,duration:0.48,ease:'expo.out'}, 2.71)
-  .fromTo('.qa',{opacity:0,x:55},{opacity:1,x:0,duration:0.36,ease:'power3.out'},2.80)
+  // P4 in — from BOTTOM-RIGHT
+  .fromTo('.qm',{opacity:0,x:60},{opacity:.35,x:0,duration:.36,ease:'power3.out'},2.66)
+  .fromTo('.qt',{opacity:0,x:82},{opacity:1,  x:0,duration:.50,ease:'expo.out'}, 2.71)
+  .fromTo('.qa',{opacity:0,x:56},{opacity:1,  x:0,duration:.36,ease:'power3.out'},2.81)
 
-  /* ════════════════════════════════════════
-     S4 → S5   scroll 60% → 80%
-     Camera:  crane UP + nearly straight + slow push in
-     Image:   i4(7.jpg) → i5(8.jpg)  [dark power]
-     Text:    P4 fades UP out  |  P5 RISES from below
-  ════════════════════════════════════════ */
+  /* ══════════════════════════════════════════
+     SCENE 4 → 5  [3 – 4]
+     Video 2.mp4  →  Image 7.jpg (eye reflection)
+     Camera: crane UP + nearly level + slow push in
+     Text: P4 flies UP out  |  P5 rises from BELOW
+  ══════════════════════════════════════════ */
   .to('#cam',{scale:1.55,rotation:2,xPercent:-3,yPercent:-9,duration:1,ease:'none'},3)
 
-  .to('#g4',{opacity:0,duration:0.35,ease:'none'},3.57)
-  .to('#g5',{opacity:1,duration:0.35,ease:'none'},3.57)
-  .to('#i4',{opacity:0,duration:0.45,ease:'none'},3.53)
-  .to('#i5',{opacity:1,duration:0.45,ease:'none'},3.53)
+  .to('#g4',{opacity:0,duration:.36,ease:'none'},3.57)
+  .to('#g5',{opacity:1,duration:.36,ease:'none'},3.57)
+  .to('#l3',{opacity:0,duration:.5,ease:'none'},3.52)
+  .to('#l5',{opacity:1,duration:.5,ease:'none'},3.52)
 
-  // P4 out — fly UP
-  .to('.qm',{opacity:0,y:-50,duration:0.28,ease:'power2.in'},3.06)
-  .to('.qt',{opacity:0,y:-65,duration:0.32,ease:'power2.in'},3.09)
-  .to('.qa',{opacity:0,y:-45,duration:0.28,ease:'power2.in'},3.12)
+  // P4 out — UP
+  .to('.qm',{opacity:0,y:-55,duration:.28,ease:'power2.in'},3.06)
+  .to('.qt',{opacity:0,y:-68,duration:.32,ease:'power2.in'},3.09)
+  .to('.qa',{opacity:0,y:-48,duration:.28,ease:'power2.in'},3.12)
 
-  // P5 in — rise from below
-  .fromTo('.p5badge',{opacity:0,y:54},{opacity:1,y:0,duration:0.38,ease:'power3.out'},3.66)
-  .fromTo('.p5title',{opacity:0,y:80},{opacity:1,y:0,duration:0.52,ease:'expo.out'}, 3.72)
-  .fromTo('.p5line', {width:0},       {width:'58px',duration:0.38,ease:'power3.inOut'},3.82)
-  .fromTo('.p5body', {opacity:0,y:40},{opacity:1,y:0,duration:0.42,ease:'power3.out'},3.90)
+  // P5 in — rise from BELOW
+  .fromTo('.p5badge',{opacity:0,y:56},{opacity:1,y:0,duration:.38,ease:'power3.out'},3.66)
+  .fromTo('.p5title',{opacity:0,y:84},{opacity:1,y:0,duration:.54,ease:'expo.out'}, 3.72)
+  .fromTo('.p5line', {width:0},       {width:'60px',duration:.40,ease:'power3.inOut'},3.83)
+  .fromTo('.p5body', {opacity:0,y:42},{opacity:1,y:0,duration:.44,ease:'power3.out'},3.92)
 
-  /* ════════════════════════════════════════
-     S5 hold  scroll 80% → 100%
-     Camera:  final slow push straight in
-  ════════════════════════════════════════ */
-  .to('#cam',{scale:1.85,rotation:0,xPercent:0,yPercent:0,duration:1,ease:'none'},4);
+  /* ══════════════════════════════════════════
+     SCENE 5 HOLD  [4 – 5]
+     Final slow push straight in to 1.85×
+  ══════════════════════════════════════════ */
+  .to('#cam',{scale:1.88,rotation:0,xPercent:0,yPercent:0,duration:1,ease:'none'},4);
 }
 </script>
 </body>
