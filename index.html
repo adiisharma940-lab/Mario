@@ -393,6 +393,13 @@ gsap.to('.lf',{width:'100%',duration:2,ease:'power2.inOut',delay:.3,
 
 /* ─── INIT ─── */
 function init(){
+  // Preload images + force via JS (belt & suspenders)
+  const imgMap = {l4:'assets/4.jpg',l5:'assets/7.jpg',l6:'assets/9.jpg',l7:'assets/3.jpg',l8:'assets/8.jpg'};
+  Object.entries(imgMap).forEach(([id,src])=>{
+    new Image().src = src;
+    document.getElementById(id).style.backgroundImage = `url('${src}')`;
+  });
+
   // Start all videos looping (muted so browser allows)
   ['v1','v2','v3'].forEach(id=>{
     const v=document.getElementById(id);
