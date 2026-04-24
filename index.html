@@ -7,6 +7,10 @@
 <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@900&family=Bebas+Neue&family=Noto+Serif+JP:wght@300;400;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+<!-- Kill scroll restore before anything renders -->
+<script>if('scrollRestoration' in history)history.scrollRestoration='manual';window.scrollTo(0,0);</script>
+
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
 :root{--red:#C0392B;--ice:#90CAF9;--bone:#F5E6D3;--dark:#050508;}
@@ -25,19 +29,20 @@ body{color:var(--bone);font-family:'Noto Serif JP',serif;cursor:none;}
 .lf{position:absolute;left:0;top:0;height:1px;width:0;background:var(--red);}
 .ltxt{font-size:10px;letter-spacing:.5em;color:rgba(255,255,255,.25);text-transform:uppercase;}
 
+/* ── SCROLL LAYOUT ── */
 #track{position:relative;}
 .spacer{height:700vh;}
 .scene{position:sticky;top:0;width:100vw;height:100vh;overflow:hidden;}
 
-/* CAM fills scene + 30% bleed on each side for pan room */
+/* ── CAMERA ── */
 #cam{position:absolute;top:-30%;left:-30%;width:160%;height:160%;transform-origin:center center;will-change:transform;}
 
-/* Every layer fills #cam fully */
+/* ── LAYERS ── */
 .ml{position:absolute;top:0;left:0;width:100%;height:100%;opacity:0;will-change:opacity;}
 .ml video{width:100%;height:100%;object-fit:cover;display:block;}
 .ml.img{background-size:cover;background-position:center;background-repeat:no-repeat;}
 
-/* Colour grade overlays — OUTSIDE #cam so they don't zoom with camera */
+/* ── GRADES (outside #cam — don't zoom) ── */
 .gr{position:absolute;inset:0;pointer-events:none;opacity:0;z-index:2;}
 #g1{background:radial-gradient(ellipse at 55% 50%,rgba(100,0,0,.6) 0%,rgba(0,0,0,.88) 100%);}
 #g2{background:radial-gradient(ellipse at 40% 55%,rgba(21,101,192,.55) 0%,rgba(0,0,0,.92) 100%);}
@@ -45,45 +50,51 @@ body{color:var(--bone);font-family:'Noto Serif JP',serif;cursor:none;}
 #g4{background:radial-gradient(ellipse at 50% 50%,rgba(0,0,0,.2) 0%,rgba(0,0,0,.96) 100%);}
 #g5{background:radial-gradient(ellipse at center,rgba(139,0,0,.4) 0%,rgba(0,0,0,.98) 80%);}
 
-/* Text panels */
+/* ── TEXT PANELS ── */
 .tp{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;z-index:20;}
 
+/* P1 */
 #p1{flex-direction:column;gap:0;}
 .p1jp{font-family:'Noto Serif JP',serif;font-size:clamp(50px,11vw,140px);color:rgba(255,255,255,.035);position:absolute;letter-spacing:.45em;user-select:none;}
-.p1sub{font-size:clamp(9px,1.2vw,13px);letter-spacing:.75em;color:var(--red);text-transform:uppercase;opacity:0;transform:translateY(40px);margin-bottom:14px;}
+.p1sub{font-size:clamp(9px,1.2vw,13px);letter-spacing:.75em;color:var(--red);text-transform:uppercase;margin-bottom:14px;opacity:0;transform:translateY(40px);}
 .p1name{font-family:'Cinzel Decorative',serif;font-size:clamp(70px,17vw,210px);font-weight:900;line-height:.85;background:linear-gradient(135deg,#fff 0%,#e8c4c4 30%,var(--red) 58%,var(--ice) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 0 80px rgba(192,57,43,.5));opacity:0;transform:translateY(70px) scale(.9);}
 .p1scroll{position:absolute;bottom:38px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:7px;opacity:0;}
 .p1scroll span{font-size:8px;letter-spacing:.55em;color:rgba(255,255,255,.25);text-transform:uppercase;}
 .p1scroll i{display:block;width:1px;height:52px;background:linear-gradient(to bottom,var(--red),transparent);animation:sla 2s ease-in-out infinite;}
 @keyframes sla{0%,100%{opacity:1;transform:scaleY(1);transform-origin:top}50%{opacity:.2;transform:scaleY(.35);transform-origin:top}}
 
+/* P2 */
 #p2{justify-content:flex-start;align-items:center;padding-left:9vw;}
 .p2w{max-width:500px;}
-.plabel{font-size:10px;letter-spacing:.65em;color:var(--red);text-transform:uppercase;margin-bottom:14px;opacity:0;}
-.phead{font-family:'Cinzel Decorative',serif;font-size:clamp(24px,3.8vw,48px);line-height:1.12;margin-bottom:20px;opacity:0;}
-.pbody{font-size:clamp(13px,1.15vw,15px);line-height:2;color:rgba(245,230,211,.62);opacity:0;}
-.srow{display:flex;gap:36px;margin-top:28px;padding-top:24px;border-top:1px solid rgba(192,57,43,.2);opacity:0;}
+.plabel{font-size:10px;letter-spacing:.65em;color:var(--red);text-transform:uppercase;margin-bottom:14px;opacity:0;transform:translateX(-70px);}
+.phead{font-family:'Cinzel Decorative',serif;font-size:clamp(24px,3.8vw,48px);line-height:1.12;margin-bottom:20px;opacity:0;transform:translateX(-100px);}
+.pbody{font-size:clamp(13px,1.15vw,15px);line-height:2;color:rgba(245,230,211,.62);opacity:0;transform:translateX(-70px);}
+.srow{display:flex;gap:36px;margin-top:28px;padding-top:24px;border-top:1px solid rgba(192,57,43,.2);opacity:0;transform:translateY(36px);}
 .sv{font-family:'Bebas Neue',sans-serif;font-size:46px;color:var(--red);line-height:1;display:block;}
 .sl{font-size:9px;letter-spacing:.3em;color:rgba(255,255,255,.28);text-transform:uppercase;}
 
+/* P3 */
 #p3{flex-direction:column;gap:14px;}
-.p3tech{font-family:'Bebas Neue',sans-serif;font-size:clamp(11px,1.6vw,17px);letter-spacing:.95em;color:var(--ice);text-shadow:0 0 30px rgba(144,202,249,.85);opacity:0;}
-.p3big{font-family:'Cinzel Decorative',serif;font-size:clamp(42px,9.5vw,125px);font-weight:900;line-height:1;background:linear-gradient(90deg,var(--ice) 0%,#fff 50%,var(--ice) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 0 55px rgba(144,202,249,.65));opacity:0;}
-.p3sub{font-size:clamp(10px,1.15vw,13px);letter-spacing:.45em;color:rgba(144,202,249,.52);opacity:0;}
+.p3tech{font-family:'Bebas Neue',sans-serif;font-size:clamp(11px,1.6vw,17px);letter-spacing:.95em;color:var(--ice);text-shadow:0 0 30px rgba(144,202,249,.85);opacity:0;transform:translateY(-55px);}
+.p3big{font-family:'Cinzel Decorative',serif;font-size:clamp(42px,9.5vw,125px);font-weight:900;line-height:1;background:linear-gradient(90deg,var(--ice) 0%,#fff 50%,var(--ice) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 0 55px rgba(144,202,249,.65));opacity:0;transform:scale(1.55);}
+.p3sub{font-size:clamp(10px,1.15vw,13px);letter-spacing:.45em;color:rgba(144,202,249,.52);opacity:0;transform:translateY(55px);}
 
+/* P4 */
 #p4{justify-content:flex-end;align-items:flex-end;padding:0 8vw 7vh 0;}
 .p4w{max-width:560px;text-align:right;}
-.qm{font-family:'Cinzel Decorative',serif;font-size:130px;color:var(--red);line-height:.35;display:block;opacity:0;}
-.qt{font-family:'Noto Serif JP',serif;font-size:clamp(15px,1.8vw,22px);line-height:1.95;font-style:italic;opacity:0;}
-.qa{font-size:10px;letter-spacing:.45em;color:var(--red);text-transform:uppercase;margin-top:18px;opacity:0;}
+.qm{font-family:'Cinzel Decorative',serif;font-size:130px;color:var(--red);line-height:.35;display:block;opacity:0;transform:translateX(55px);}
+.qt{font-family:'Noto Serif JP',serif;font-size:clamp(15px,1.8vw,22px);line-height:1.95;font-style:italic;opacity:0;transform:translateX(75px);}
+.qa{font-size:10px;letter-spacing:.45em;color:var(--red);text-transform:uppercase;margin-top:18px;opacity:0;transform:translateX(50px);}
 
+/* P5 */
 #p5{flex-direction:column;text-align:center;gap:0;}
 .p5jp{font-family:'Noto Serif JP',serif;font-size:clamp(80px,18vw,200px);color:rgba(192,57,43,.045);position:absolute;letter-spacing:.2em;user-select:none;}
-.p5badge{border:1px solid rgba(192,57,43,.35);padding:9px 28px;font-size:9px;letter-spacing:.65em;color:var(--red);text-transform:uppercase;margin-bottom:30px;opacity:0;}
-.p5title{font-family:'Cinzel Decorative',serif;font-size:clamp(20px,3.8vw,52px);max-width:700px;line-height:1.25;opacity:0;}
+.p5badge{border:1px solid rgba(192,57,43,.35);padding:9px 28px;font-size:9px;letter-spacing:.65em;color:var(--red);text-transform:uppercase;margin-bottom:30px;opacity:0;transform:translateY(40px);}
+.p5title{font-family:'Cinzel Decorative',serif;font-size:clamp(20px,3.8vw,52px);max-width:700px;line-height:1.25;opacity:0;transform:translateY(60px);}
 .p5line{width:0;height:1px;background:var(--red);margin:28px auto;}
-.p5body{font-size:clamp(13px,1.1vw,15px);line-height:2.1;color:rgba(245,230,211,.5);max-width:520px;opacity:0;}
+.p5body{font-size:clamp(13px,1.1vw,15px);line-height:2.1;color:rgba(245,230,211,.5);max-width:520px;opacity:0;transform:translateY(34px);}
 
+/* ── UI ── */
 #dots{position:fixed;right:26px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:10px;z-index:200;}
 .dot{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.18);transition:all .35s;cursor:pointer;}
 .dot.on{background:var(--red);transform:scale(1.8);}
@@ -121,15 +132,9 @@ body{color:var(--bone);font-family:'Noto Serif JP',serif;cursor:none;}
   <div class="scene">
 
     <div id="cam">
-      <div class="ml" id="l1">
-        <video id="v1" loop muted playsinline preload="auto"><source src="assets/5.mp4" type="video/mp4"></video>
-      </div>
-      <div class="ml" id="l2">
-        <video id="v2" loop muted playsinline preload="auto"><source src="assets/6.mp4" type="video/mp4"></video>
-      </div>
-      <div class="ml" id="l3">
-        <video id="v3" loop muted playsinline preload="auto"><source src="assets/2.mp4" type="video/mp4"></video>
-      </div>
+      <div class="ml" id="l1"><video id="v1" loop muted playsinline preload="auto"><source src="assets/5.mp4" type="video/mp4"></video></div>
+      <div class="ml" id="l2"><video id="v2" loop muted playsinline preload="auto"><source src="assets/6.mp4" type="video/mp4"></video></div>
+      <div class="ml" id="l3"><video id="v3" loop muted playsinline preload="auto"><source src="assets/2.mp4" type="video/mp4"></video></div>
       <div class="ml img" id="l4"></div>
       <div class="ml img" id="l5"></div>
     </div>
@@ -188,13 +193,13 @@ body{color:var(--bone);font-family:'Noto Serif JP',serif;cursor:none;}
 <script>
 gsap.registerPlugin(ScrollTrigger);
 
-/* CURSOR */
+/* ── CURSOR ── */
 const cur=document.getElementById('cur'),cur2=document.getElementById('cur2');
 let mx=0,my=0,rx=0,ry=0;
 document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px';});
 (function ring(){rx+=(mx-rx)*0.1;ry+=(my-ry)*0.1;cur2.style.left=rx+'px';cur2.style.top=ry+'px';requestAnimationFrame(ring);})();
 
-/* SOUND */
+/* ── SOUND ── */
 const ost=document.getElementById('ost');
 const iconOn=document.getElementById('icon-sound');
 const iconOff=document.getElementById('icon-mute');
@@ -209,11 +214,7 @@ window.addEventListener('scroll',()=>{
   if(!audioStarted){audioStarted=true;ost.play().then(()=>{playing=true;iconOn.style.display='';iconOff.style.display='none';}).catch(()=>{});}
 },{once:true});
 
-/* Force top on every load — prevents browser scroll restore jumping to scene 5 */
-window.scrollTo(0,0);
-history.scrollRestoration='manual';
-
-/* LOADER */
+/* ── LOADER ── */
 gsap.to('.lk',{opacity:1,duration:.6,delay:.2});
 gsap.to('.lf',{width:'100%',duration:2,ease:'power2.inOut',delay:.3,
   onComplete:()=>gsap.to('#loader',{opacity:0,duration:.75,delay:.2,
@@ -221,36 +222,33 @@ gsap.to('.lf',{width:'100%',duration:2,ease:'power2.inOut',delay:.3,
   })
 });
 
-/* INIT */
+/* ── INIT ── */
 function init(){
-  // Apply image backgrounds via JS — most reliable method
+  // Set image backgrounds via JS
   document.getElementById('l4').style.backgroundImage='url("assets/4.jpg")';
   document.getElementById('l5').style.backgroundImage='url("assets/7.jpg")';
-
-  // Preload
   ['assets/4.jpg','assets/7.jpg'].forEach(s=>{const i=new Image();i.src=s;});
 
-  // Videos
+  // Play videos
   document.getElementById('v1').play().catch(()=>{});
   document.getElementById('v2').play().catch(()=>{});
   document.getElementById('v3').play().catch(()=>{});
 
-  // Scene 1 visible
+  // Scene 1
   gsap.set('#l1',{opacity:1});
   gsap.set('#g1',{opacity:1});
 
-  // Hero text entrance
+  // Hero entrance
   gsap.to('.p1sub',{opacity:1,y:0,duration:1.1,ease:'power3.out',delay:.4});
   gsap.to('.p1name',{opacity:1,y:0,scale:1,duration:1.6,ease:'expo.out',delay:.6});
   gsap.to('.p1scroll',{opacity:1,duration:1,delay:2.2});
 
-  // Ensure scroll is at top before building timeline
+  // Ensure at top, then build scroll timeline
   window.scrollTo(0,0);
-  // Small delay lets layout fully paint before ScrollTrigger measures
-  setTimeout(buildTimeline, 100);
+  setTimeout(buildTimeline,150);
 }
 
-/* TIMELINE */
+/* ── TIMELINE ── */
 function buildTimeline(){
   const dots=document.querySelectorAll('.dot');
   const cnt=document.getElementById('cnt');
