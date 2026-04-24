@@ -255,6 +255,9 @@ body{color:var(--bone);font-family:'Noto Serif JP',serif;cursor:none;}
   <source src="assets/1.webm" type="audio/webm">
 </audio>
 
+<!-- DEBUG -->
+<div id="dbg"></div>
+
 <!-- SCROLL TRACK -->
 <div id="track">
   <div class="spacer"></div>
@@ -378,6 +381,9 @@ window.addEventListener('scroll',()=>{
   if(!audioStarted){audioStarted=true;ost.play().then(()=>{playing=true;iconOn.style.display='';iconOff.style.display='none';}).catch(()=>{});}
 },{once:true});
 
+/* ── DEBUG ── */
+#dbg{position:fixed;bottom:60px;left:10px;z-index:9999;font-size:11px;font-family:monospace;color:lime;background:rgba(0,0,0,.7);padding:8px;line-height:1.7;pointer-events:none;}
+
 /* ─── LOADER ─── */
 gsap.to('.lk',{opacity:1,duration:.6,delay:.2});
 gsap.to('.lf',{width:'100%',duration:2,ease:'power2.inOut',delay:.3,
@@ -491,6 +497,21 @@ function buildTimeline(){
   .fromTo('.p5body', {opacity:0,y:42},{opacity:1,y:0,duration:.44,ease:'power3.out'},3.92)
 
   .to('#cam',{scale:1.88,rotation:0,xPercent:0,yPercent:0,duration:1,ease:'none'},4);
+
+  // DEBUG: show layer opacities + bg loaded
+  const dbg = document.getElementById('dbg');
+  const layers = ['l1','l2','l3','l4','l5'];
+  function updateDbg(){
+    dbg.innerHTML = layers.map(id=>{
+      const el = document.getElementById(id);
+      const op = parseFloat(getComputedStyle(el).opacity).toFixed(2);
+      const bg = el.style.backgroundImage || getComputedStyle(el).backgroundImage;
+      const hasBg = bg && bg !== 'none' ? '✓' : '✗';
+      return `${id}: op=${op} bg=${hasBg}`;
+    }).join('<br>');
+    requestAnimationFrame(updateDbg);
+  }
+  updateDbg();
 }
 </script>
 </body>
