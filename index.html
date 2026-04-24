@@ -7,7 +7,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@900&family=Bebas+Neue&family=Noto+Serif+JP:wght@300;400;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-
 <script>if('scrollRestoration' in history)history.scrollRestoration='manual';window.scrollTo(0,0);</script>
 
 <style>
@@ -25,23 +24,20 @@ body{color:var(--bone);font-family:'Noto Serif JP',serif;cursor:none;}
 #loader{position:fixed;inset:0;background:var(--dark);z-index:9997;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:22px;}
 .lk{font-family:'Noto Serif JP',serif;font-size:90px;color:var(--red);opacity:0;}
 .lb{width:180px;height:1px;background:rgba(255,255,255,.07);position:relative;overflow:hidden;}
-.lf{position:absolute;left:0;top:0;height:1px;width:0;background:var(--red);}
+.lf{position:absolute;left:0;top:0;height:1px;width:0;background:var(--red);transition:width .3s ease;}
 .ltxt{font-size:10px;letter-spacing:.5em;color:rgba(255,255,255,.25);text-transform:uppercase;}
+.lpct{font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:.4em;color:rgba(192,57,43,.5);margin-top:-10px;}
 
-/* ── SCROLL LAYOUT ── */
 #track{position:relative;}
 .spacer{height:700vh;}
 .scene{position:sticky;top:0;width:100vw;height:100vh;overflow:hidden;}
 
-/* ── CAMERA ── */
 #cam{position:absolute;top:-30%;left:-30%;width:160%;height:160%;transform-origin:center center;will-change:transform;}
 
-/* ── LAYERS ── */
 .ml{position:absolute;top:0;left:0;width:100%;height:100%;opacity:0;will-change:opacity;}
 .ml video{width:100%;height:100%;object-fit:cover;display:block;}
 .ml.img{background-size:cover;background-position:center;background-repeat:no-repeat;}
 
-/* ── GRADES ── */
 .gr{position:absolute;inset:0;pointer-events:none;opacity:0;z-index:2;}
 #g1{background:radial-gradient(ellipse at 55% 50%,rgba(100,0,0,.6) 0%,rgba(0,0,0,.88) 100%);}
 #g2{background:radial-gradient(ellipse at 40% 55%,rgba(21,101,192,.55) 0%,rgba(0,0,0,.92) 100%);}
@@ -49,20 +45,10 @@ body{color:var(--bone);font-family:'Noto Serif JP',serif;cursor:none;}
 #g4{background:radial-gradient(ellipse at 50% 50%,rgba(0,0,0,.2) 0%,rgba(0,0,0,.96) 100%);}
 #g5{background:radial-gradient(ellipse at center,rgba(139,0,0,.4) 0%,rgba(0,0,0,.98) 80%);}
 
-/* ── TEXT PANELS ── */
 .tp{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;z-index:20;}
 
-/* P1 */
 #p1{flex-direction:column;gap:0;}
-.p1jp{
-  font-family:'Noto Serif JP',serif;
-  font-size:clamp(50px,11vw,140px);
-  color:rgba(255,255,255,.035);
-  position:absolute;
-  letter-spacing:.45em;
-  user-select:none;
-  /* start visible, will be faded out by JS */
-}
+.p1jp{font-family:'Noto Serif JP',serif;font-size:clamp(50px,11vw,140px);color:rgba(255,255,255,.035);position:absolute;letter-spacing:.45em;user-select:none;}
 .p1sub{font-size:clamp(9px,1.2vw,13px);letter-spacing:.75em;color:var(--red);text-transform:uppercase;margin-bottom:14px;opacity:0;transform:translateY(40px);}
 .p1name{font-family:'Cinzel Decorative',serif;font-size:clamp(70px,17vw,210px);font-weight:900;line-height:.85;background:linear-gradient(135deg,#fff 0%,#e8c4c4 30%,var(--red) 58%,var(--ice) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 0 80px rgba(192,57,43,.5));opacity:0;transform:translateY(70px) scale(.9);}
 .p1scroll{position:absolute;bottom:38px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:7px;opacity:0;}
@@ -70,7 +56,6 @@ body{color:var(--bone);font-family:'Noto Serif JP',serif;cursor:none;}
 .p1scroll i{display:block;width:1px;height:52px;background:linear-gradient(to bottom,var(--red),transparent);animation:sla 2s ease-in-out infinite;}
 @keyframes sla{0%,100%{opacity:1;transform:scaleY(1);transform-origin:top}50%{opacity:.2;transform:scaleY(.35);transform-origin:top}}
 
-/* P2 */
 #p2{justify-content:flex-start;align-items:center;padding-left:9vw;}
 .p2w{max-width:500px;}
 .plabel{font-size:10px;letter-spacing:.65em;color:var(--red);text-transform:uppercase;margin-bottom:14px;opacity:0;transform:translateX(-70px);}
@@ -80,20 +65,17 @@ body{color:var(--bone);font-family:'Noto Serif JP',serif;cursor:none;}
 .sv{font-family:'Bebas Neue',sans-serif;font-size:46px;color:var(--red);line-height:1;display:block;}
 .sl{font-size:9px;letter-spacing:.3em;color:rgba(255,255,255,.28);text-transform:uppercase;}
 
-/* P3 */
 #p3{flex-direction:column;gap:14px;}
 .p3tech{font-family:'Bebas Neue',sans-serif;font-size:clamp(11px,1.6vw,17px);letter-spacing:.95em;color:var(--ice);text-shadow:0 0 30px rgba(144,202,249,.85);opacity:0;transform:translateY(-55px);}
 .p3big{font-family:'Cinzel Decorative',serif;font-size:clamp(42px,9.5vw,125px);font-weight:900;line-height:1;background:linear-gradient(90deg,var(--ice) 0%,#fff 50%,var(--ice) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 0 55px rgba(144,202,249,.65));opacity:0;transform:scale(1.55);}
 .p3sub{font-size:clamp(10px,1.15vw,13px);letter-spacing:.45em;color:rgba(144,202,249,.52);opacity:0;transform:translateY(55px);}
 
-/* P4 */
 #p4{justify-content:flex-end;align-items:flex-end;padding:0 8vw 7vh 0;}
 .p4w{max-width:560px;text-align:right;}
 .qm{font-family:'Cinzel Decorative',serif;font-size:130px;color:var(--red);line-height:.35;display:block;opacity:0;transform:translateX(55px);}
 .qt{font-family:'Noto Serif JP',serif;font-size:clamp(15px,1.8vw,22px);line-height:1.95;font-style:italic;opacity:0;transform:translateX(75px);}
 .qa{font-size:10px;letter-spacing:.45em;color:var(--red);text-transform:uppercase;margin-top:18px;opacity:0;transform:translateX(50px);}
 
-/* P5 */
 #p5{flex-direction:column;text-align:center;gap:0;}
 .p5jp{font-family:'Noto Serif JP',serif;font-size:clamp(80px,18vw,200px);color:rgba(192,57,43,.045);position:absolute;letter-spacing:.2em;user-select:none;}
 .p5badge{border:1px solid rgba(192,57,43,.35);padding:9px 28px;font-size:9px;letter-spacing:.65em;color:var(--red);text-transform:uppercase;margin-bottom:30px;opacity:0;transform:translateY(40px);}
@@ -101,7 +83,6 @@ body{color:var(--bone);font-family:'Noto Serif JP',serif;cursor:none;}
 .p5line{width:0;height:1px;background:var(--red);margin:28px auto;}
 .p5body{font-size:clamp(13px,1.1vw,15px);line-height:2.1;color:rgba(245,230,211,.5);max-width:520px;opacity:0;transform:translateY(34px);}
 
-/* ── UI ── */
 #dots{position:fixed;right:26px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:10px;z-index:200;}
 .dot{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.18);transition:all .35s;cursor:pointer;}
 .dot.on{background:var(--red);transform:scale(1.8);}
@@ -113,7 +94,8 @@ body{color:var(--bone);font-family:'Noto Serif JP',serif;cursor:none;}
 
 <div id="loader">
   <div class="lk">猗窩座</div>
-  <div class="lb"><div class="lf"></div></div>
+  <div class="lb"><div class="lf" id="lbar"></div></div>
+  <div class="lpct" id="lpct">0%</div>
   <div class="ltxt">Loading</div>
 </div>
 
@@ -137,7 +119,6 @@ body{color:var(--bone);font-family:'Noto Serif JP',serif;cursor:none;}
 <div id="track">
   <div class="spacer"></div>
   <div class="scene">
-
     <div id="cam">
       <div class="ml" id="l1"><video id="v1" loop muted playsinline preload="auto"><source src="assets/5.mp4" type="video/mp4"></video></div>
       <div class="ml" id="l2"><video id="v2" loop muted playsinline preload="auto"><source src="assets/6.mp4" type="video/mp4"></video></div>
@@ -193,7 +174,6 @@ body{color:var(--bone);font-family:'Noto Serif JP',serif;cursor:none;}
       <div class="p5line"></div>
       <p class="p5body">He despised weakness not from cruelty, but from grief — for the ones he could not save. In death, Hakuji remembered. And remembering, he chose to be human once more.</p>
     </div>
-
   </div>
 </div>
 
@@ -221,33 +201,87 @@ window.addEventListener('scroll',()=>{
   if(!audioStarted){audioStarted=true;ost.play().then(()=>{playing=true;iconOn.style.display='';iconOff.style.display='none';}).catch(()=>{});}
 },{once:true});
 
-/* ── LOADER ── */
+/* ── ASSET PRELOADER ── */
+const lbar=document.getElementById('lbar');
+const lpct=document.getElementById('lpct');
+const v1=document.getElementById('v1');
+const v2=document.getElementById('v2');
+const v3=document.getElementById('v3');
+
+// Kick off image fetches immediately
+document.getElementById('l4').style.backgroundImage='url("assets/4.jpg")';
+document.getElementById('l5').style.backgroundImage='url("assets/7.jpg")';
+
+function loadImage(src){
+  return new Promise(res=>{
+    const img=new Image();
+    img.onload=img.onerror=()=>res();
+    img.src=src;
+  });
+}
+
+function loadVideo(el){
+  return new Promise(res=>{
+    // Already has enough data
+    if(el.readyState>=3){res();return;}
+    const done=()=>{
+      el.removeEventListener('canplay',done);
+      el.removeEventListener('error',done);
+      res();
+    };
+    el.addEventListener('canplay',done);
+    el.addEventListener('error',done);
+    // Hard cap: never stall longer than 10s per asset
+    setTimeout(res,10000);
+  });
+}
+
+// Show kanji immediately
 gsap.to('.lk',{opacity:1,duration:.6,delay:.2});
-gsap.to('.lf',{width:'100%',duration:2,ease:'power2.inOut',delay:.3,
-  onComplete:()=>gsap.to('#loader',{opacity:0,duration:.75,delay:.2,
-    onComplete:()=>{document.getElementById('loader').style.display='none';init();}
-  })
-});
+
+const assets=[
+  loadVideo(v1),
+  loadVideo(v2),
+  loadVideo(v3),
+  loadImage('assets/4.jpg'),
+  loadImage('assets/7.jpg'),
+];
+
+let doneCount=0;
+const total=assets.length;
+
+function onProgress(){
+  doneCount++;
+  const pct=Math.round((doneCount/total)*100);
+  lbar.style.width=pct+'%';
+  lpct.textContent=pct+'%';
+  if(doneCount>=total) onAllLoaded();
+}
+
+assets.forEach(p=>p.then(onProgress).catch(onProgress));
+
+function onAllLoaded(){
+  setTimeout(()=>{
+    gsap.to('#loader',{opacity:0,duration:.75,
+      onComplete:()=>{
+        document.getElementById('loader').style.display='none';
+        init();
+      }
+    });
+  },300);
+}
 
 /* ── INIT ── */
 function init(){
-  document.getElementById('l4').style.backgroundImage='url("assets/4.jpg")';
-  document.getElementById('l5').style.backgroundImage='url("assets/7.jpg")';
-  ['assets/4.jpg','assets/7.jpg'].forEach(s=>{const i=new Image();i.src=s;});
+  v1.play().catch(()=>{});
+  v2.play().catch(()=>{});
+  v3.play().catch(()=>{});
 
-  document.getElementById('v1').play().catch(()=>{});
-  document.getElementById('v2').play().catch(()=>{});
-  document.getElementById('v3').play().catch(()=>{});
-
-  /* Set initial states explicitly */
   gsap.set('#cam',{scale:1,rotation:0,xPercent:0,yPercent:0});
   gsap.set('#l1',{opacity:1});
   gsap.set('#g1',{opacity:1});
-
-  /* Fix: set p5line initial width to 0 */
   gsap.set('.p5line',{width:0});
 
-  /* Hero entrance */
   gsap.to('.p1sub',{opacity:1,y:0,duration:1.1,ease:'power3.out',delay:.4});
   gsap.to('.p1name',{opacity:1,y:0,scale:1,duration:1.6,ease:'expo.out',delay:.6});
   gsap.to('.p1scroll',{opacity:1,duration:1,delay:2.2});
@@ -256,7 +290,7 @@ function init(){
   setTimeout(buildTimeline,150);
 }
 
-/* ── TIMELINE ── */
+/* ── SCROLL TIMELINE ── */
 function buildTimeline(){
   const dots=document.querySelectorAll('.dot');
   const cnt=document.getElementById('cnt');
@@ -273,84 +307,64 @@ function buildTimeline(){
     }
   });
 
-  /* ── SCENE 1 → 2 ── */
+  /* 1 → 2 */
   tl
-  /* Camera moves */
   .to('#cam',{scale:1.4,rotation:-6,xPercent:7,yPercent:-4,duration:1,ease:'none'},0)
-
-  /* Fix: fade out p1jp watermark and scroll indicator BEFORE scene 2 */
   .to('.p1jp',{opacity:0,duration:.25},0.02)
   .to('.p1scroll',{opacity:0,duration:.2},0.05)
   .to('.p1sub',{opacity:0,y:-65,duration:.28},0.08)
   .to('.p1name',{opacity:0,y:-90,scale:.88,duration:.32},0.06)
-
-  /* Grade & layer crossfade */
   .to('#g1',{opacity:0,duration:.38},.60)
   .to('#g2',{opacity:1,duration:.38},.60)
   .to('#l1',{opacity:0,duration:.5},.55)
   .to('#l2',{opacity:1,duration:.5},.55)
-
-  /* P2 in */
   .fromTo('.plabel',{opacity:0,x:-80},{opacity:1,x:0,duration:.4},.68)
   .fromTo('.phead',{opacity:0,x:-115},{opacity:1,x:0,duration:.46},.72)
   .fromTo('.pbody',{opacity:0,x:-80},{opacity:1,x:0,duration:.4},.78)
   .fromTo('.srow',{opacity:0,y:40},{opacity:1,y:0,duration:.36},.86)
 
-  /* ── SCENE 2 → 3 ── */
+  /* 2 → 3 */
   .to('#cam',{scale:1.8,rotation:8,xPercent:-10,yPercent:5,duration:1,ease:'none'},1)
   .to('#g2',{opacity:0,duration:.36},1.58)
   .to('#g3',{opacity:1,duration:.36},1.58)
   .to('#l2',{opacity:0,duration:.5},1.53)
   .to('#l4',{opacity:1,duration:.5},1.53)
-
-  /* P2 out */
   .to('.plabel',{opacity:0,x:80,duration:.28},1.06)
   .to('.phead',{opacity:0,x:105,duration:.30},1.09)
   .to('.pbody',{opacity:0,x:80,duration:.28},1.12)
   .to('.srow',{opacity:0,y:-38,duration:.26},1.14)
-
-  /* P3 in */
   .fromTo('.p3tech',{opacity:0,y:-60},{opacity:1,y:0,duration:.38},1.66)
   .fromTo('.p3big',{opacity:0,scale:1.6},{opacity:1,scale:1,duration:.56},1.70)
   .fromTo('.p3sub',{opacity:0,y:60},{opacity:1,y:0,duration:.38},1.79)
 
-  /* ── SCENE 3 → 4 ── */
+  /* 3 → 4 */
   .to('#cam',{scale:1.22,rotation:-10,xPercent:12,yPercent:8,duration:1,ease:'none'},2)
   .to('#g3',{opacity:0,duration:.36},2.58)
   .to('#g4',{opacity:1,duration:.36},2.58)
   .to('#l4',{opacity:0,duration:.5},2.53)
   .to('#l3',{opacity:1,duration:.5},2.53)
-
-  /* P3 out */
   .to('.p3tech',{opacity:0,y:-70,duration:.28},2.06)
   .to('.p3big',{opacity:0,scale:.65,duration:.32},2.06)
   .to('.p3sub',{opacity:0,y:70,duration:.28},2.09)
-
-  /* P4 in */
   .fromTo('.qm',{opacity:0,x:60},{opacity:.35,x:0,duration:.36},2.66)
   .fromTo('.qt',{opacity:0,x:82},{opacity:1,x:0,duration:.50},2.71)
   .fromTo('.qa',{opacity:0,x:56},{opacity:1,x:0,duration:.36},2.81)
 
-  /* ── SCENE 4 → 5 ── */
+  /* 4 → 5 */
   .to('#cam',{scale:1.55,rotation:2,xPercent:-3,yPercent:-9,duration:1,ease:'none'},3)
   .to('#g4',{opacity:0,duration:.36},3.57)
   .to('#g5',{opacity:1,duration:.36},3.57)
   .to('#l3',{opacity:0,duration:.5},3.52)
   .to('#l5',{opacity:1,duration:.5},3.52)
-
-  /* P4 out */
   .to('.qm',{opacity:0,y:-55,duration:.28},3.06)
   .to('.qt',{opacity:0,y:-68,duration:.32},3.09)
   .to('.qa',{opacity:0,y:-48,duration:.28},3.12)
-
-  /* P5 in */
   .fromTo('.p5badge',{opacity:0,y:56},{opacity:1,y:0,duration:.38},3.66)
   .fromTo('.p5title',{opacity:0,y:84},{opacity:1,y:0,duration:.54},3.72)
-  /* Fix: properly animate p5line from 0 to 60px */
   .fromTo('.p5line',{width:'0px'},{width:'60px',duration:.40},3.83)
   .fromTo('.p5body',{opacity:0,y:42},{opacity:1,y:0,duration:.44},3.92)
 
-  /* Scene 5 hold / slow zoom */
+  /* Scene 5 hold */
   .to('#cam',{scale:1.88,rotation:0,xPercent:0,yPercent:0,duration:1,ease:'none'},4);
 }
 </script>
