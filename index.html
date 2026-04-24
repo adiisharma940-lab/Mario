@@ -209,6 +209,10 @@ window.addEventListener('scroll',()=>{
   if(!audioStarted){audioStarted=true;ost.play().then(()=>{playing=true;iconOn.style.display='';iconOff.style.display='none';}).catch(()=>{});}
 },{once:true});
 
+/* Force top on every load — prevents browser scroll restore jumping to scene 5 */
+window.scrollTo(0,0);
+history.scrollRestoration='manual';
+
 /* LOADER */
 gsap.to('.lk',{opacity:1,duration:.6,delay:.2});
 gsap.to('.lf',{width:'100%',duration:2,ease:'power2.inOut',delay:.3,
@@ -240,7 +244,10 @@ function init(){
   gsap.to('.p1name',{opacity:1,y:0,scale:1,duration:1.6,ease:'expo.out',delay:.6});
   gsap.to('.p1scroll',{opacity:1,duration:1,delay:2.2});
 
-  buildTimeline();
+  // Ensure scroll is at top before building timeline
+  window.scrollTo(0,0);
+  // Small delay lets layout fully paint before ScrollTrigger measures
+  setTimeout(buildTimeline, 100);
 }
 
 /* TIMELINE */
