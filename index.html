@@ -61,11 +61,11 @@ body{color:var(--bone);font-family:'Noto Serif JP',serif;cursor:none;}
 #l1{} /* video 5.mp4 */
 #l2{} /* video 6.mp4 */
 #l3{} /* video 2.mp4 */
-#l4{background-image:url('adiisharma940-lab.github.io/Mario/assets/4.jpg');filter:saturate(1.4) brightness(.8);}  /* eye close-up */
-#l5{background-image:url('adiisharma940-lab.github.io/Mario/assets/7.jpg');filter:saturate(1.2) brightness(.65);} /* eye reflection */
-#l6{background-image:url('adiisharma940-lab.github.io/Mario/assets/9.jpg');filter:hue-rotate(200deg) saturate(.5) brightness(.45);} /* origin dark */
-#l7{background-image:url('adiisharma940-lab.github.io/Mario/assets/3.jpg');} /* akaza + woman */
-#l8{background-image:url('adiisharma940-lab.github.io/Mario/assets/8.jpg');filter:brightness(.3) saturate(.2);} /* dark power */
+#l4{background-image:url('assets/4.jpg');filter:saturate(1.4) brightness(.8);}
+#l5{background-image:url('assets/7.jpg');filter:saturate(1.2) brightness(.65);}
+#l6{background-image:url('assets/9.jpg');filter:hue-rotate(200deg) saturate(.5) brightness(.45);}
+#l7{background-image:url('assets/3.jpg');}
+#l8{background-image:url('assets/8.jpg');filter:brightness(.3) saturate(.2);}
 
 /* ── COLOUR GRADES ── */
 .gr{position:absolute;inset:0;pointer-events:none;opacity:0;will-change:opacity;z-index:2;}
@@ -251,7 +251,7 @@ body{color:var(--bone);font-family:'Noto Serif JP',serif;cursor:none;}
 
 <!-- HIDDEN AUDIO -->
 <audio id="ost" loop preload="auto">
-  <source src="adiisharma940-lab.github.io/Mario/assets/1.webm" type="audio/webm">
+  <source src="assets/1.webm" type="audio/webm">
 </audio>
 
 <!-- SCROLL TRACK -->
@@ -265,28 +265,28 @@ body{color:var(--bone);font-family:'Noto Serif JP',serif;cursor:none;}
       <!-- Layer 1: video 5.mp4 — hero intro -->
       <div class="ml" id="l1">
         <video id="v1" loop muted playsinline preload="auto">
-          <source src="adiisharma940-lab.github.io/Mario/assets/5.mp4" type="video/mp4">
+          <source src="assets/5.mp4" type="video/mp4">
         </video>
       </div>
       <!-- Layer 2: video 6.mp4 — combat -->
       <div class="ml" id="l2">
         <video id="v2" loop muted playsinline preload="auto">
-          <source src="adiisharma940-lab.github.io/Mario/assets/6.mp4" type="video/mp4">
+          <source src="assets/6.mp4" type="video/mp4">
         </video>
       </div>
       <!-- Layer 3: video 2.mp4 — intense -->
       <div class="ml" id="l3">
         <video id="v3" loop muted playsinline preload="auto">
-          <source src="adiisharma940-lab.github.io/Mario/assets/2.mp4" type="video/mp4">
+          <source src="assets/2.mp4" type="video/mp4">
         </video>
       </div>
       <!-- Layer 4: image 4.jpg — eye close-up -->
       <div class="ml img" id="l4"></div>
       <!-- Layer 5: image 7.jpg — eye reflection -->
       <div class="ml img" id="l5"></div>
-      <!-- Layer 6: image 3.jpg — akaza + woman -->
+      <!-- Layer 6: image 9.jpg — origin dark -->
       <div class="ml img" id="l6"></div>
-      <!-- Layer 7: image 9.jpg — dark origin -->
+      <!-- Layer 7: image 3.jpg — akaza + woman -->
       <div class="ml img" id="l7"></div>
       <!-- Layer 8: image 8.jpg — power -->
       <div class="ml img" id="l8"></div>
@@ -430,109 +430,58 @@ function buildTimeline(){
     }
   });
 
-  /* ══════════════════════════════════════════
-     SCENE 1 → 2  [0 – 1]
-     Video 5.mp4  →  Video 6.mp4
-     Camera: zoom in + tilt -6° + pan left
-     Text: P1 flies UP out  |  P2 slides from LEFT
-  ══════════════════════════════════════════ */
   tl
   .to('#cam',{scale:1.4,rotation:-6,xPercent:7,yPercent:-4,duration:1,ease:'none'},0)
-
-  // grade swap
   .to('#g1',{opacity:0,duration:.38,ease:'none'},.60)
   .to('#g2',{opacity:1,duration:.38,ease:'none'},.60)
-
-  // media swap: video1 → video2
   .to('#l1',{opacity:0,duration:.5,ease:'none'},.55)
   .to('#l2',{opacity:1,duration:.5,ease:'none'},.55)
-
-  // P1 out — UP
   .to('.p1sub', {opacity:0,y:-65,duration:.28,ease:'power2.in'},.08)
   .to('.p1name',{opacity:0,y:-90,scale:.88,duration:.32,ease:'power2.in'},.06)
   .to('.p1scroll',{opacity:0,duration:.2},.05)
-
-  // P2 in — from LEFT
   .fromTo('.plabel',{opacity:0,x:-80},{opacity:1,x:0,duration:.40,ease:'power3.out'},.68)
   .fromTo('.phead', {opacity:0,x:-115},{opacity:1,x:0,duration:.46,ease:'expo.out'}, .72)
   .fromTo('.pbody', {opacity:0,x:-80}, {opacity:1,x:0,duration:.40,ease:'power3.out'},.78)
   .fromTo('.srow',  {opacity:0,y:40},  {opacity:1,y:0,duration:.36,ease:'power3.out'},.86)
 
-  /* ══════════════════════════════════════════
-     SCENE 2 → 3  [1 – 2]
-     Video 6.mp4  →  Image 4.jpg (eye close-up)
-     Camera: BIG zoom + counter-tilt +8° + pan right
-     Text: P2 flies RIGHT out  |  P3 scales in from centre
-  ══════════════════════════════════════════ */
   .to('#cam',{scale:1.8,rotation:8,xPercent:-10,yPercent:5,duration:1,ease:'none'},1)
-
   .to('#g2',{opacity:0,duration:.36,ease:'none'},1.58)
   .to('#g3',{opacity:1,duration:.36,ease:'none'},1.58)
   .to('#l2',{opacity:0,duration:.5,ease:'none'},1.53)
   .to('#l4',{opacity:1,duration:.5,ease:'none'},1.53)
-
-  // P2 out — RIGHT
   .to('.plabel',{opacity:0,x:80, duration:.28,ease:'power2.in'},1.06)
   .to('.phead', {opacity:0,x:105,duration:.30,ease:'power2.in'},1.09)
   .to('.pbody', {opacity:0,x:80, duration:.28,ease:'power2.in'},1.12)
   .to('.srow',  {opacity:0,y:-38,duration:.26,ease:'power2.in'},1.14)
-
-  // P3 in — scale zoom
   .fromTo('.p3tech',{opacity:0,y:-60},    {opacity:1,y:0,duration:.38,ease:'power3.out'},1.66)
   .fromTo('.p3big', {opacity:0,scale:1.6},{opacity:1,scale:1,duration:.56,ease:'expo.out'},1.70)
   .fromTo('.p3sub', {opacity:0,y:60},     {opacity:1,y:0,duration:.38,ease:'power3.out'},1.79)
 
-  /* ══════════════════════════════════════════
-     SCENE 3 → 4  [2 – 3]
-     Image 4.jpg  →  Video 2.mp4
-     Camera: pull back + tilt -10° + pan right-down
-     Text: P3 shrinks OUT  |  P4 slides from BOTTOM-RIGHT
-  ══════════════════════════════════════════ */
   .to('#cam',{scale:1.22,rotation:-10,xPercent:12,yPercent:8,duration:1,ease:'none'},2)
-
   .to('#g3',{opacity:0,duration:.36,ease:'none'},2.58)
   .to('#g4',{opacity:1,duration:.36,ease:'none'},2.58)
   .to('#l4',{opacity:0,duration:.5,ease:'none'},2.53)
   .to('#l3',{opacity:1,duration:.5,ease:'none'},2.53)
-
-  // P3 out — shrink
   .to('.p3tech',{opacity:0,y:-70, duration:.28,ease:'power2.in'},2.06)
   .to('.p3big', {opacity:0,scale:.65,duration:.32,ease:'power2.in'},2.06)
   .to('.p3sub', {opacity:0,y:70,  duration:.28,ease:'power2.in'},2.09)
-
-  // P4 in — from BOTTOM-RIGHT
   .fromTo('.qm',{opacity:0,x:60},{opacity:.35,x:0,duration:.36,ease:'power3.out'},2.66)
   .fromTo('.qt',{opacity:0,x:82},{opacity:1,  x:0,duration:.50,ease:'expo.out'}, 2.71)
   .fromTo('.qa',{opacity:0,x:56},{opacity:1,  x:0,duration:.36,ease:'power3.out'},2.81)
 
-  /* ══════════════════════════════════════════
-     SCENE 4 → 5  [3 – 4]
-     Video 2.mp4  →  Image 7.jpg (eye reflection)
-     Camera: crane UP + nearly level + slow push in
-     Text: P4 flies UP out  |  P5 rises from BELOW
-  ══════════════════════════════════════════ */
   .to('#cam',{scale:1.55,rotation:2,xPercent:-3,yPercent:-9,duration:1,ease:'none'},3)
-
   .to('#g4',{opacity:0,duration:.36,ease:'none'},3.57)
   .to('#g5',{opacity:1,duration:.36,ease:'none'},3.57)
   .to('#l3',{opacity:0,duration:.5,ease:'none'},3.52)
   .to('#l5',{opacity:1,duration:.5,ease:'none'},3.52)
-
-  // P4 out — UP
   .to('.qm',{opacity:0,y:-55,duration:.28,ease:'power2.in'},3.06)
   .to('.qt',{opacity:0,y:-68,duration:.32,ease:'power2.in'},3.09)
   .to('.qa',{opacity:0,y:-48,duration:.28,ease:'power2.in'},3.12)
-
-  // P5 in — rise from BELOW
   .fromTo('.p5badge',{opacity:0,y:56},{opacity:1,y:0,duration:.38,ease:'power3.out'},3.66)
   .fromTo('.p5title',{opacity:0,y:84},{opacity:1,y:0,duration:.54,ease:'expo.out'}, 3.72)
   .fromTo('.p5line', {width:0},       {width:'60px',duration:.40,ease:'power3.inOut'},3.83)
   .fromTo('.p5body', {opacity:0,y:42},{opacity:1,y:0,duration:.44,ease:'power3.out'},3.92)
 
-  /* ══════════════════════════════════════════
-     SCENE 5 HOLD  [4 – 5]
-     Final slow push straight in to 1.85×
-  ══════════════════════════════════════════ */
   .to('#cam',{scale:1.88,rotation:0,xPercent:0,yPercent:0,duration:1,ease:'none'},4);
 }
 </script>
