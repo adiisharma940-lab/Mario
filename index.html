@@ -49,14 +49,15 @@ body{color:var(--bone);font-family:'Noto Serif JP',serif;cursor:none;}
 /* ── CAMERA ── */
 #cam{
   position:absolute;inset:-30%;
+  width:160%;height:160%;
   transform-origin:center center;
   will-change:transform;
 }
 
 /* ── VIDEO / IMAGE LAYERS ── */
-.ml{position:absolute;inset:0;opacity:0;will-change:opacity,transform;}
+.ml{position:absolute;inset:0;width:100%;height:100%;opacity:0;will-change:opacity,transform;}
 .ml video{width:100%;height:100%;object-fit:cover;display:block;}
-.ml.img{background-size:cover;background-position:center;}
+.ml.img{background-size:cover;background-position:center;width:100%;height:100%;}
 
 #l1{} /* video 5.mp4 */
 #l2{} /* video 6.mp4 */
